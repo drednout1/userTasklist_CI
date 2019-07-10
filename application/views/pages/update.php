@@ -6,4 +6,4 @@
             <button id="submit" type="submit">Confirm</button>
         </form><br>
     </div>
-    <a href="http://localhost/tasks/list">Return to tasks</a><br><br>
+    <a href="/tasks/list">Return to tasks</a><br><br>
