@@ -9,25 +9,72 @@ class Tasks extends CI_Controller
     }
     public function list()
     {
-        $this->tasks_model->list();
+        session_start();
+        ini_set('display_errors', false);
+        ini_set('display_startup_errors', false);
+        error_reporting(E_ALL);
 
+        if ($_SESSION['id']) 
+        {
+            $users = $this->tasks_model->list();
+        };
         $this->load->view('templates/header');
-        $this->load->view('pages/tasks');
+        $this->load->view('pages/tasks' , ['tasks' => $users]);
         $this->load->view('templates/footer');
     }
     
     public function save()
     {
-        $this->tasks_model->save();
+        session_start();
+        header('location: /tasks/list');
+        ini_set('display_errors', false);
+        ini_set('display_startup_errors', false);
+        error_reporting(E_ALL);
+
+        $text = $this->input->get('text');
+
+        if ($text){ 
+        $this->tasks_model->save($text);
+        };
 }
 
     public function delete()
     {
-        $this->tasks_model->delete();
+        session_start();
+
+        ini_set('display_errors', false);
+        ini_set('display_startup_errors', false);
+        error_reporting(E_ALL);
+
+        header("Location: /tasks/list");
+
+        $task = $this->input->get('task');
+
+        if ($task && $_SESSION['id']) 
+        {
+        $this->tasks_model->delete($task);
+        };
     }
 
     public function update()
     {
-        $this->tasks_model->update();
+        session_start();
+
+        ini_set('display_errors', true);
+        ini_set('display_startup_errors', true);
+        error_reporting(E_ALL);
+
+        $text = $this->input->get('text');
+        $task = $this->input->get('task');
+
+        if($text)
+        {
+            $this->tasks_model->update($text, $task);
+            header("Location: /tasks/list");
+        };
+
+        $this->load->view('templates/header');
+        $this->load->view('pages/update' , ['task' => $task]);
+        $this->load->view('templates/footer');
     }
 }
